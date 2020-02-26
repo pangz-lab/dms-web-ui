@@ -1,0 +1,12 @@
+.content-header {
+  font-size: 25px;
+  font-family: 'Courier New', Courier, monospace;
+  padding: 10px;
+}
+
+.mat-figure {
+  display: inline;
+  align-items: baseline !important;
+  justify-content: flex-start !important;
+
+}

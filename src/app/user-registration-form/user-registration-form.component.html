@@ -1,0 +1,73 @@
+<mat-vertical-stepper linear #stepper>
+  <mat-step [stepControl]="addressFormGroup">
+    <form [formGroup]="addressFormGroup" class="registration-form">
+      <ng-template matStepLabel>Fill out your address</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="T-Address/Public Address" formControlName="tAddress" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Email Address" formControlName="email" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="transactionDetailFormGroup" [optional]="!withDeposit">
+    <button mat-raised-button (click)="withDeposit = !withDeposit">
+      {{withDeposit ?  'No deposit yet' : 'With deposit'}}
+    </button>
+    <form [formGroup]="transactionDetailFormGroup" class="registration-form">
+      <ng-template matStepLabel>Fill out your transaction</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Transaction ID" [disabled]="withDeposit" formControlName="transactionId" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secretWordsFormGroup">
+    <form [formGroup]="secretWordsFormGroup" class="registration-form">
+      <ng-template matStepLabel>Fill out your secret words</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Secret Word 1" formControlName="secretWord1" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Secret Word 2" formControlName="secretWord2" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Secret Word 3" formControlName="secretWord3" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <!-- <form [formGroup]="secretWordsFormGroup" class="registration-form"> -->
+      <ng-template matStepLabel>Review and Submit</ng-template>
+      <p>{{addressFormGroup.get('tAddress').value}}</p>
+      <p>{{addressFormGroup.get('email').value}}</p>
+      <p>{{transactionDetailFormGroup.get('transactionId').value}}</p>
+      <p>{{secretWordsFormGroup.get('secretWord1').value}}</p>
+      <p>{{secretWordsFormGroup.get('secretWord2').value}}</p>
+      <p>{{secretWordsFormGroup.get('secretWord3').value}}</p>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <!-- <button mat-button matStepperNext>Next</button>
+        <button mat-button > Submit </button> -->
+        <button mat-raised-button color="accent" (click)="onSubmit(); stepper.reset()" [disabled]="!addressFormGroup.valid && !secretWordsFormGroup.valid && (withDeposit && !transactionDetailFormGroup.valid)">Submit</button>
+      </div>
+    <!-- </form> -->
+  </mat-step>
+  <!-- <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step> -->
+</mat-vertical-stepper>

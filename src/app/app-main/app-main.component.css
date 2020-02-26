@@ -1,0 +1,50 @@
+mat-toolbar {
+  padding: 0px;
+}
+
+.sidenav-image-container {
+  border: 50px;
+  margin: 20px;
+  width: 300px;
+  height: 300px;
+}
+
+.app-main-container {
+  width: 100%;
+  height: 90%;
+  border: 1px solid rgba(31, 20, 20, 0.5);
+}
+
+.app-sidenav {
+  padding: 20px;
+}
+
+.menu-item {
+  min-width: 100%;
+  width: 100%;
+}
+
+/*
+.scrollbar {
+  background-color: #F5F5F5;
+  float: left;
+  height: 300px;
+  margin-bottom: 25px;
+  margin-left: 22px;
+  margin-top: 40px;
+  width: 65px;
+  overflow-y: scroll;
+} */
+
+/* .force-overflow {
+  min-height: 450px;
+} */
+
+.app-main-content {
+  /* display: flex; */
+  min-height: 90%;
+  /* height: 100%; */
+  align-items: center;
+  justify-content: center;
+}
+

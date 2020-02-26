@@ -1,0 +1,104 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="walletAddress">
+          <th mat-header-cell *matHeaderCellDef> Wallet Address </th>
+          <td mat-cell *matCellDef="let element"> {{element.walletAddress}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalCoins">
+          <th mat-header-cell *matHeaderCellDef> Total Coins </th>
+          <td mat-cell *matCellDef="let element"> {{element.totalCoins}} </td>
+        </ng-container>
+        <ng-container matColumnDef="deposits">
+          <th mat-header-cell *matHeaderCellDef> Deposits </th>
+          <td mat-cell *matCellDef="let element"> {{element.deposits}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="withdrawals">
+          <th mat-header-cell *matHeaderCellDef> Withdrawals </th>
+          <td mat-cell *matCellDef="let element"> {{element.withdrawals}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="percentageOverride">
+          <th mat-header-cell *matHeaderCellDef> %Override </th>
+          <td mat-cell *matCellDef="let element"> {{element.percentageOverride}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dateAdded">
+          <th mat-header-cell *matHeaderCellDef> Date Added </th>
+          <td mat-cell *matCellDef="let element"> {{element.dateAdded}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dateUpdated">
+          <th mat-header-cell *matHeaderCellDef> Date Updated </th>
+          <td mat-cell *matCellDef="let element"> {{element.dateUpdated}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="originalBalance">
+          <th mat-header-cell *matHeaderCellDef> Orig Balance </th>
+          <td mat-cell *matCellDef="let element"> {{element.originalBalance}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="previousBalance">
+          <th mat-header-cell *matHeaderCellDef> Prev Balance </th>
+          <td mat-cell *matCellDef="let element"> {{element.previousBalance}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="originalTransaction">
+          <th mat-header-cell *matHeaderCellDef> Original Tx </th>
+          <td mat-cell *matCellDef="let element"> {{element.originalTransaction}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="latestTransaction">
+          <th mat-header-cell *matHeaderCellDef> Latest Tx </th>
+          <td mat-cell *matCellDef="let element"> {{element.latestTransaction}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="remarks">
+          <th mat-header-cell *matHeaderCellDef> Remarks </th>
+          <td mat-cell *matCellDef="let element"> {{element.remarks}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="earnings">
+          <th mat-header-cell *matHeaderCellDef> Earnings </th>
+          <td mat-cell *matCellDef="let element"> {{element.earnings}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="currentPercentage">
+          <th mat-header-cell *matHeaderCellDef> Current% </th>
+          <td mat-cell *matCellDef="let element"> {{element.currentPercentage}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stakingPercentage">
+          <th mat-header-cell *matHeaderCellDef> Staking% </th>
+          <td mat-cell *matCellDef="let element"> {{element.stakingPercentage}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stakeReward">
+          <th mat-header-cell *matHeaderCellDef> Stake Reward </th>
+          <td mat-cell *matCellDef="let element"> {{element.stakeReward}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="depositStake">
+          <th mat-header-cell *matHeaderCellDef> Deposit Stake </th>
+          <td mat-cell *matCellDef="let element"> {{element.depositStake}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="currentBalance">
+          <th mat-header-cell *matHeaderCellDef> Current Balance </th>
+          <td mat-cell *matCellDef="let element"> {{element.currentBalance}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stakeRewardAmount">
+          <th mat-header-cell *matHeaderCellDef> Stake Rewards </th>
+          <td mat-cell *matCellDef="let element"> {{element.stakeRewardAmount}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</div>
+

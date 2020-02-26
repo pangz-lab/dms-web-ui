@@ -1,0 +1,42 @@
+<mat-toolbar>
+  <button mat-icon-button color="accent" aria-label="Example icon-button with a heart icon" (click)="drawer.toggle()">
+    <mat-icon color="basic">view_headline</mat-icon>
+  </button> <span>Dudezmobi Staking Pool</span>
+</mat-toolbar>
+<mat-drawer-container class="app-main-container">
+  <mat-drawer #drawer class="app-sidenav" mode="side">
+    <!-- <img class="w3-circle sidenav-image-container" src="https://pbs.twimg.com/profile_images/1319800229/cosmic_web_3b.jpg" alt="Dudezmobi"> -->
+    <img class="w3-circle sidenav-image-container" src="../../assets/images/primary-pic" alt="Dudezmobi">
+    <mat-card>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item routerLink="/tx-summary">
+            <button mat-raised-button color="basic" class="menu-item">Transaction Summary</button>
+          </mat-list-item>
+          <mat-list-item routerLink="/tx-detail">
+            <button mat-raised-button color="basic" class="menu-item">
+              Transaction Detail
+            </button>
+          </mat-list-item>
+          <mat-list-item routerLink="/update-history">
+            <button mat-raised-button color="basic" class="menu-item">
+              Update History
+            </button>
+          </mat-list-item>
+        </mat-list>
+        <br>
+        <mat-divider></mat-divider>
+        <mat-list>
+          <mat-list-item routerLink="/user-registration">
+            <button mat-raised-button color="accent" class="menu-item">Join the pool!</button>
+          </mat-list-item>
+        </mat-list>
+
+      </mat-card-content>
+    </mat-card>
+  </mat-drawer>
+  <div class="app-main-content" [@routeAnimation]="getAnimationData(routerOutlet)">
+    <!-- <app-transaction-summary></app-transaction-summary> -->
+    <router-outlet #routerOutlet="outlet"></router-outlet>
+  </div>
+</mat-drawer-container>
