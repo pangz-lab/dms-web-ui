@@ -45,10 +45,15 @@ export interface UserTransactionList {
   detail: UserTransactionDetail[];
 }
 
-export interface UpdateHistoryRecord {
+export interface UpdateHistorySummary {
   id: number;
   date: string;
   description: string;
   remarks: string;
   author: string;
+}
+
+export interface PayloadTemplate {
+  name: string;
+  value: any;
 }

@@ -8,11 +8,11 @@ import { PagNotFoundComponent } from './pag-not-found/pag-not-found.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 
 const appRoutes: Routes = [
-  { path: 'tx-summary', component: TransactionSummaryComponent },
-  { path: 'tx-detail', component: TransactionDetailComponent },
+  { path: 'transaction-summary', component: TransactionSummaryComponent },
+  { path: 'transaction-detail', component: TransactionDetailComponent },
   { path: 'update-history', component: UpdateHistoryComponent },
   { path: 'user-registration', component: UserRegistrationComponent },
-  { path: '',   redirectTo: '/tx-summary', pathMatch: 'full' },
+  { path: '',   redirectTo: '/transaction-summary', pathMatch: 'full' },
   { path: '**', component: PagNotFoundComponent }
 ];
 

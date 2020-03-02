@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { QueryService } from './../service/query.service';
+import { PayloadTemplate } from '../interface';
+
 // import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { single } from './data';
 //https://github.com/swimlane/ngx-charts
@@ -12,21 +15,39 @@ import { single } from './data';
 })
 export class TransactionSummaryChartComponent implements OnInit {
   single: any[];
+  // @Input() dataSrc: any[];
   view: any[] = [250, 250];
 
   // options
-  gradient: boolean = true;
-  showLegend: boolean = true;
-  showLabels: boolean = false;
-  isDoughnut: boolean = false;
-  legendPosition: string = 'below';
+  gradient = true;
+  showLegend = true;
+  showLabels = false;
+  isDoughnut = false;
+  legendPosition = 'below';
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
 
-  constructor() {
-    Object.assign(this, { single });
+  constructor(private queryService: QueryService) {
+    console.log('1. Inside constructor ...');
+    Object.assign(this, { single});
+  }
+
+  ngOnInit() {
+    // this.queryService.getBalanceSummary()
+    // .subscribe(
+    //   (serverResponse: PayloadTemplate[]) => {
+    //     console.log('2. Inside getBalanceSummary subscribe...');
+    //     console.log(serverResponse['data']);
+    //     this.balanceSummary = serverResponse['data'];
+    //     const bs = serverResponse['data'];
+
+    //     Object.assign(this, { bs});
+    //     // Object.assign(this, { this.balanceSummary });
+    //     // this.setupDatatable(this.tableData);
+    //   },
+    // );
   }
 
   onSelect(data): void {
@@ -39,9 +60,6 @@ export class TransactionSummaryChartComponent implements OnInit {
 
   onDeactivate(data): void {
     console.log('Deactivate', JSON.parse(JSON.stringify(data)));
-  }
-
-  ngOnInit() {
   }
 
 }

@@ -3,113 +3,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { UserTransactionDetail, UserTransactionList} from '../interface';
-
-const TRANSACTION_DATA: UserTransactionList[] = [
-  {
-    id: 1,
-    stakeNumber: 1,
-    name: 'Stake 1',
-    transactionId: 'Transaction 1',
-    description: 'Description 1',
-    dateTime: 'January 1,2020',
-    detail: [
-      {
-        walletAddress: '1JFAKLJJ34K2LJJL45H2J354',
-        totalCoins: 1243.43,
-        deposits: 12333,
-        withdrawals: 0,
-        percentageOverride: 33.3,
-        dateAdded: '6/8/2019',
-        dateUpdated: '6/8/2019',
-        originalBalance: 5000,
-        previousBalance: 500,
-        originalTransaction: 'FASD452342GG5',
-        latestTransaction: 'FASD452342GG5',
-        remarks: 'Remarks',
-        earnings: 0,
-        currentPercentage: 0,
-        stakingPercentage: 0,
-        stakeReward: 0,
-        depositStake: 0,
-        currentBalance: 0,
-        stakeRewardAmount: 0,
-      },
-      {
-        walletAddress: '2JFAKLJJ34K2LJJL45H2J354',
-        totalCoins: 1243.43,
-        deposits: 12333,
-        withdrawals: 0,
-        percentageOverride: 33.3,
-        dateAdded: '6/8/2019',
-        dateUpdated: '6/8/2019',
-        originalBalance: 5000,
-        previousBalance: 500,
-        originalTransaction: 'FASD452342GG5',
-        latestTransaction: 'FASD452342GG5',
-        remarks: 'Remarks',
-        earnings: 0,
-        currentPercentage: 0,
-        stakingPercentage: 0,
-        stakeReward: 0,
-        depositStake: 0,
-        currentBalance: 0,
-        stakeRewardAmount: 0,
-      },
-    ],
-  },
-  {
-    id: 2,
-    stakeNumber: 2,
-    name: 'Stake 2',
-    transactionId: 'Transaction 2',
-    description: 'Description 2',
-    dateTime: 'January 1,2020',
-    detail: [
-      {
-        walletAddress: '2JFAKLJJ34K2LJJL45H2J354',
-        totalCoins: 1243.43,
-        deposits: 12333,
-        withdrawals: 0,
-        percentageOverride: 33.3,
-        dateAdded: '6/8/2019',
-        dateUpdated: '6/8/2019',
-        originalBalance: 5000,
-        previousBalance: 500,
-        originalTransaction: 'FASD452342GG5',
-        latestTransaction: 'FASD452342GG5',
-        remarks: 'Remarks',
-        earnings: 0,
-        currentPercentage: 0,
-        stakingPercentage: 0,
-        stakeReward: 0,
-        depositStake: 0,
-        currentBalance: 0,
-        stakeRewardAmount: 0,
-      },
-      {
-        walletAddress: '2JFAKLJJ34K2LJJL45H2J354',
-        totalCoins: 1243.43,
-        deposits: 12333,
-        withdrawals: 0,
-        percentageOverride: 33.3,
-        dateAdded: '6/8/2019',
-        dateUpdated: '6/8/2019',
-        originalBalance: 5000,
-        previousBalance: 500,
-        originalTransaction: 'FASD452342GG5',
-        latestTransaction: 'FASD452342GG5',
-        remarks: 'Remarks',
-        earnings: 0,
-        currentPercentage: 0,
-        stakingPercentage: 0,
-        stakeReward: 0,
-        depositStake: 0,
-        currentBalance: 0,
-        stakeRewardAmount: 0,
-      },
-    ],
-  },
-];
+import { QueryService } from './../service/query.service';
 
 @Component({
   selector: 'app-transaction-detail-group',
@@ -124,8 +18,7 @@ const TRANSACTION_DATA: UserTransactionList[] = [
   ],
 })
 export class TransactionDetailGroupComponent implements OnInit {
-  // dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  dataSource = new MatTableDataSource<UserTransactionList>(TRANSACTION_DATA);
+  dataSource: MatTableDataSource<UserTransactionList>;
   // columnsToDisplay = ['name', 'weight', 'symbol', 'position'];
   headerColumns = [
     'id',
@@ -178,28 +71,7 @@ export class TransactionDetailGroupComponent implements OnInit {
   ];
   // expandedElement: PeriodicElement | null;
   expandedElement: UserTransactionList | null;
-
-  // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   displayedColumns: string[] = [
-    // 'Wallet Address',
-    // 'Total Coins',
-    // 'Deposits',
-    // 'Withdrawals',
-    // '%Override',
-    // 'Date Added',
-    // 'Date Updated',
-    // 'Orig Balance',
-    // 'Prev Balance',
-    // 'Orig Tx',
-    // 'Latest Tx',
-    // 'Remarks',
-    // 'Earnings',
-    // 'Current%',
-    // 'Staking%',
-    // 'Stake Reward',
-    // 'Deposit Stake',
-    // 'Current Balance',
-    // 'Stake Rewards',
     'walletAddress',
     'totalCoins',
     'deposits',
@@ -223,10 +95,18 @@ export class TransactionDetailGroupComponent implements OnInit {
   // dataSource2 = ELEMENT_DATA2;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  constructor() { }
+  constructor(private queryService: QueryService) { }
 
   ngOnInit() {
-    this.dataSource.paginator = this.paginator;
+    this.queryService.getTransactionList()
+    .subscribe(
+      (serverResponse: UserTransactionList[]) => {
+        console.log('Inside subscribe getTransactionList...');
+        this.dataSource = new MatTableDataSource<UserTransactionList>(serverResponse['data']);
+        this.dataSource.paginator = this.paginator;
+      },
+    );
+
   }
 
   applyFilter(filterValue: string) {
