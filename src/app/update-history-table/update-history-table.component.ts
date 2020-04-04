@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { UpdateHistorySummary } from '../interface';
-import { QueryService } from './../service/query.service';
+import { UpdateHistorySummary } from 'src/app/interface';
+import { QueryService } from 'src/app/service/query.service';
 
 @Component({
   selector: 'app-update-history-table',

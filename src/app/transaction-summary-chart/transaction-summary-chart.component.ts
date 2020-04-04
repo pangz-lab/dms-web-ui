@@ -1,12 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { QueryService } from './../service/query.service';
-import { PayloadTemplate } from '../interface';
+import { QueryService } from 'src/app/service/query.service';
+import { UserTransactionDetail, PayloadTemplate} from 'src/app/interface';
+import { ChartType, ChartOptions } from 'chart.js';
+import { SingleDataSet, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
 
-// import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { single } from './data';
-//https://github.com/swimlane/ngx-charts
-//https://stackblitz.com/edit/swimlane-pie-chart?embed=1&file=app/app.component.ts
-//https://swimlane.github.io/ngx-charts/#/ngx-charts/bar-horizontal
 
 @Component({
   selector: 'app-transaction-summary-chart',
@@ -14,52 +11,66 @@ import { single } from './data';
   styleUrls: ['./transaction-summary-chart.component.css']
 })
 export class TransactionSummaryChartComponent implements OnInit {
-  single: any[];
-  // @Input() dataSrc: any[];
-  view: any[] = [250, 250];
+    // Pie
+    public pieChartOptions: ChartOptions = {
+      responsive: true,
+      legend: { position: 'left'}
+    };
+    public pieChartLabels: Label[] = ['Current Balance', 'Stake Rewards'];
+    // public pieChartLabels: Label[];
+    public pieChartData: SingleDataSet = [30, 70];
+    // public pieChartData: SingleDataSet;
+    // public pieChartData: number[];
+    public pieChartType: ChartType = 'pie';
+    public pieChartLegend = true;
+    public pieChartPlugins = [];
 
-  // options
-  gradient = true;
-  showLegend = true;
-  showLabels = false;
-  isDoughnut = false;
-  legendPosition = 'below';
+    constructor(private queryService: QueryService) {
+      // this.queryService.getBalanceSummary()
+      // .subscribe(
+      //   (serverResponse: PayloadTemplate[]) => {
+      //     console.log('Inside subscribe getBalanceSummary...');
+      //     const data = serverResponse['data'];
+      //     // console.log(data);
+      //     let tempTitle: string[] = [];
+      //     let tempData: number[] = [];
+      //     // tslint:disable-next-line:forin
+      //     for (const item of data) {
+      //       console.log(item);
+      //       tempTitle.push(item['name']);
+      //       tempData.push(item['value']);
+      //     }
 
-  colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
+      //     this.pieChartLabels = tempTitle;
+      //     this.pieChartData = tempData;
+      //     monkeyPatchChartJsTooltip();
+      //     monkeyPatchChartJsLegend();
+      //   },
+      // );
+    }
 
-  constructor(private queryService: QueryService) {
-    console.log('1. Inside constructor ...');
-    Object.assign(this, { single});
-  }
+    ngOnInit() {
+      this.queryService.getBalanceSummary()
+      .subscribe(
+        (serverResponse: PayloadTemplate[]) => {
+          console.log('Inside subscribe getBalanceSummary...');
+          const data = serverResponse['data'];
+          // console.log(data);
+          let tempTitle: string[] = [];
+          let tempData: number[] = [];
+          // tslint:disable-next-line:forin
+          for (const item of data) {
+            console.log(item);
+            tempTitle.push(item['name']);
+            tempData.push(item['value']);
+          }
 
-  ngOnInit() {
-    // this.queryService.getBalanceSummary()
-    // .subscribe(
-    //   (serverResponse: PayloadTemplate[]) => {
-    //     console.log('2. Inside getBalanceSummary subscribe...');
-    //     console.log(serverResponse['data']);
-    //     this.balanceSummary = serverResponse['data'];
-    //     const bs = serverResponse['data'];
-
-    //     Object.assign(this, { bs});
-    //     // Object.assign(this, { this.balanceSummary });
-    //     // this.setupDatatable(this.tableData);
-    //   },
-    // );
-  }
-
-  onSelect(data): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-  }
-
-  onActivate(data): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
-  }
-
-  onDeactivate(data): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
-  }
+          this.pieChartLabels = tempTitle;
+          this.pieChartData = tempData;
+          monkeyPatchChartJsTooltip();
+          monkeyPatchChartJsLegend();
+        },
+      );
+    }
 
 }

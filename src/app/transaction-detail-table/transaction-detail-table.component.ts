@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { UserTransactionList } from '../interface';
+import { UserTransactionList } from 'src/app/interface';
 
 @Component({
   selector: 'app-transaction-detail-table',

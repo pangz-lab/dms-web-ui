@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
+import {MatStepper} from '@angular/material';
 
 @Component({
   selector: 'app-user-registration-form',
@@ -8,33 +9,50 @@ import {FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular
 })
 
 export class UserRegistrationFormComponent implements OnInit {
-  addressFormGroup: FormGroup;
-  transactionDetailFormGroup: FormGroup;
-  secretWordsFormGroup: FormGroup;
-  withDeposit = true;
+    @ViewChild('stepper', {static: false}) stepper: MatStepper;
+    addressFormGroup: FormGroup;
+    transactionDetailFormGroup: FormGroup;
+    secretWordsFormGroup: FormGroup;
+    withDeposit = true;
 
 
-  constructor(private formBuilder: FormBuilder) {}
+    constructor(private formBuilder: FormBuilder) {}
 
-  ngOnInit() {
-    this.addressFormGroup = this.formBuilder.group({
-      tAddress: ['', Validators.required],
-      email: ['', Validators.required],
-    });
-    this.transactionDetailFormGroup = this.formBuilder.group({
-      transactionId: ['', Validators.required],
-    });
-    this.secretWordsFormGroup = this.formBuilder.group({
-      secretWord1: ['', Validators.required],
-      secretWord2: ['', Validators.required],
-      secretWord3: ['', Validators.required],
-    });
-  }
+    ngOnInit() {
+      this.addressFormGroup = this.formBuilder.group({
+          tAddress: ['', Validators.required],
+          email: ['', Validators.required],
+          doneDeposit: [true],
+      });
+      this.transactionDetailFormGroup = this.formBuilder.group({
+          transactionId: ['', Validators.required],
+      });
+      this.secretWordsFormGroup = this.formBuilder.group({
+          secretWord1: ['', Validators.required],
+          secretWord2: ['', Validators.required],
+          secretWord3: ['', Validators.required],
+      });
+    }
 
-  onSubmit() {
-    console.log(this.addressFormGroup.valid);
-    console.log(this.transactionDetailFormGroup.valid);
-    console.log(this.secretWordsFormGroup.valid);
-  }
+    onSubmit() {
+        console.log(this.addressFormGroup.valid);
+        console.log(this.transactionDetailFormGroup.valid);
+        console.log(this.secretWordsFormGroup.valid);
+    }
 
+    nextStep(index: number) {
+      this.stepper.selectedIndex = index;
+    }
+
+    goToNextStep() {
+      if(this.addressFormGroup.get('doneDeposit').value) {
+          this.nextStep(1);
+      } else {
+          this.nextStep(2);
+      }
+    }
+
+    // toggleDepositStatus() {
+    //   this.withDeposit = !this.withDeposit;
+    // }
 }

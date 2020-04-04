@@ -6,7 +6,7 @@ import {
   PayloadTemplate,
   UserTransactionList,
   UpdateHistorySummary
-} from '../interface';
+} from 'src/app/interface';
 import { Observable } from 'rxjs';
 
 @Injectable({

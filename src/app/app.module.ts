@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { ChartsModule } from 'ng2-charts';
 
 import {MatCheckboxModule} from '@angular/material';
 import {MatButtonModule} from '@angular/material';
@@ -54,6 +55,7 @@ import { TransactionDetailGroupComponent } from './transaction-detail-group/tran
 import { AppMainBodyComponent } from './app-main-body/app-main-body.component';
 import { UpdateHistoryTableComponent } from './update-history-table/update-history-table.component';
 import { UserRegistrationFormComponent } from './user-registration-form/user-registration-form.component';
+import { MainRegistrationComponent } from './main-registration/main-registration.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +73,8 @@ import { UserRegistrationFormComponent } from './user-registration-form/user-reg
     TransactionDetailGroupComponent,
     AppMainBodyComponent,
     UpdateHistoryTableComponent,
-    UserRegistrationFormComponent
+    UserRegistrationFormComponent,
+    MainRegistrationComponent
   ],
   imports: [
     BrowserModule,
@@ -79,6 +82,7 @@ import { UserRegistrationFormComponent } from './user-registration-form/user-reg
     BrowserAnimationsModule,
     NgxChartsModule,
     NgxDatatableModule,
+    ChartsModule,
     MatCheckboxModule,
     MatCheckboxModule,
     MatButtonModule,

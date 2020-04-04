@@ -1,8 +1,8 @@
-import { QueryService } from './../service/query.service';
+import { QueryService } from 'src/app/service/query.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { UserTransactionSummary } from '../interface';
+import { UserTransactionSummary } from 'src/app/interface';
 
 @Component({
   selector: 'app-transaction-summary-body',

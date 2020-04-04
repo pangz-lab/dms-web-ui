@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { UserTransactionDetail, UserTransactionList} from '../interface';
-import { QueryService } from './../service/query.service';
+import { UserTransactionList} from 'src/app/interface';
+import { QueryService } from 'src/app/service/query.service';
 
 @Component({
   selector: 'app-transaction-detail-group',
