@@ -40,22 +40,22 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {ReactiveFormsModule } from '@angular/forms';
 
-import { AppMainComponent } from './app-main/app-main.component';
-import { TransactionSummaryComponent } from './transaction-summary/transaction-summary.component';
-import { TransactionSummaryHeaderComponent } from './transaction-summary-header/transaction-summary-header.component';
-import { TransactionSummaryBodyComponent } from './transaction-summary-body/transaction-summary-body.component';
-import { TransactionSummaryChartComponent } from './transaction-summary-chart/transaction-summary-chart.component';
-import { UpdateHistoryComponent } from './update-history/update-history.component';
-import { AppRoutingModule } from './app-routing.module';
-import { PagNotFoundComponent } from './pag-not-found/pag-not-found.component';
-import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
-import { UserRegistrationComponent } from './user-registration/user-registration.component';
-import { TransactionDetailTableComponent } from './transaction-detail-table/transaction-detail-table.component';
-import { TransactionDetailGroupComponent } from './transaction-detail-group/transaction-detail-group.component';
-import { AppMainBodyComponent } from './app-main-body/app-main-body.component';
-import { UpdateHistoryTableComponent } from './update-history-table/update-history-table.component';
-import { UserRegistrationFormComponent } from './user-registration-form/user-registration-form.component';
-import { MainRegistrationComponent } from './main-registration/main-registration.component';
+import { AppMainComponent } from './components/app-main/app-main.component';
+import { TransactionSummaryComponent } from './components/transaction-summary/transaction-summary.component';
+import { TransactionSummaryHeaderComponent } from './components/transaction-summary-header/transaction-summary-header.component';
+import { TransactionSummaryBodyComponent } from './components/transaction-summary-body/transaction-summary-body.component';
+import { TransactionSummaryChartComponent } from './components/transaction-summary-chart/transaction-summary-chart.component';
+import { UpdateHistoryComponent } from './components/update-history/update-history.component';
+import { AppRoutingModule } from './routing/app-routing.module';
+import { PagNotFoundComponent } from './components/pag-not-found/pag-not-found.component';
+import { TransactionDetailComponent } from './components/transaction-detail/transaction-detail.component';
+import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
+import { TransactionDetailTableComponent } from './components/transaction-detail-table/transaction-detail-table.component';
+import { TransactionDetailGroupComponent } from './components/transaction-detail-group/transaction-detail-group.component';
+import { AppMainBodyComponent } from './components/app-main-body/app-main-body.component';
+import { UpdateHistoryTableComponent } from './components/update-history-table/update-history-table.component';
+import { UserRegistrationFormComponent } from './components/user-registration-form/user-registration-form.component';
+import { MainRegistrationComponent } from './components/main-registration/main-registration.component';
 
 @NgModule({
   declarations: [

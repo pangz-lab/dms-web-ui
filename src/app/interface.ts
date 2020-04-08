@@ -57,3 +57,15 @@ export interface PayloadTemplate {
   name: string;
   value: any;
 }
+
+export interface JoiningUser {
+  email: string;
+  publicAddress: string;
+  transactionId: string;
+  secretWords: string[];
+}
+
+export interface ResponseData {
+  status: any;
+  data: any;
+}

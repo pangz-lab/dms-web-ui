@@ -1,6 +1,6 @@
 .parallax {
   /* The image used */
-  background-image: url('../../assets/images/background1.jpg');
+  background-image: url('../../../assets/images/background1.jpg');
   /* background: linear-gradient(rgba(29, 38, 113, 0.8), rgba(195, 55, 100, 0.8)); */
 
   /* Full height */

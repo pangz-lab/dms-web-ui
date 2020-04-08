@@ -4,31 +4,38 @@
       <ng-template matStepLabel>Address</ng-template>
       <mat-form-field>
         <input matInput
-            placeholder="Email Address"
-            formControlName="email"
-            required>
+          placeholder = "Email Address"
+          formControlName = "email"
+          required>
+          <mat-error *ngIf="!isValidEmail()">
+            {{errorMessage.email}}
+          </mat-error>
       </mat-form-field>
       <mat-form-field>
         <input matInput
             placeholder="T-Address/Public Address"
-            formControlName="tAddress"
+            formControlName="publicAddress"
             required>
+        <mat-error *ngIf="!isValidPublicAddress()">
+          {{errorMessage.publicAddress}}
+        </mat-error>
       </mat-form-field>
-      <mat-checkbox formControlName="doneDeposit">Deposited to Dudezmobi account</mat-checkbox>
+      <mat-checkbox formControlName="doneDeposit" (click)="doneDeposiToAccountToggle()">Deposited to Dudezmobi account</mat-checkbox>
       <div>
         <button mat-raised-button color="primary" (click)="goToNextStep()">Next</button>
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="transactionDetailFormGroup" [optional]="!addressFormGroup.get('doneDeposit').value">
+  <mat-step [stepControl]="transactionDetailFormGroup" [optional]="!getDoneDeposit().value">
     <form [formGroup]="transactionDetailFormGroup" class="registration-form">
       <ng-template matStepLabel>Transaction</ng-template>
       <mat-form-field>
         <input matInput
             placeholder="Transaction ID"
-            [disabled]="withDeposit"
-            formControlName="transactionId"
-            required>
+            formControlName="transactionId">
+        <mat-error *ngIf="!isValidTransactionId()">
+          {{errorMessage.transactionId}}
+        </mat-error>
       </mat-form-field>
       <div>
         <button mat-stroked-button matStepperPrevious>Back</button>
@@ -44,18 +51,27 @@
             placeholder="Secret Word 1"
             formControlName="secretWord1"
             required>
+        <mat-error *ngIf="!isValidSecretWord(1)">
+          {{errorMessage.secretWords[1]}}
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
         <input matInput
             placeholder="Secret Word 2"
             formControlName="secretWord2"
             required>
+        <mat-error *ngIf="!isValidSecretWord(2)">
+          {{errorMessage.secretWords[2]}}
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
         <input matInput
             placeholder="Secret Word 3"
             formControlName="secretWord3"
             required>
+        <mat-error *ngIf="!isValidSecretWord(3)">
+          {{errorMessage.secretWords[3]}}
+        </mat-error>
       </mat-form-field>
       <div>
         <button mat-stroked-button matStepperPrevious>Back</button>
@@ -67,23 +83,19 @@
     <!-- <form [formGroup]="secretWordsFormGroup" class="registration-form"> -->
       <ng-template matStepLabel>Submit</ng-template>
       <p>{{addressFormGroup.get('email').value}}</p>
-      <p>{{addressFormGroup.get('tAddress').value}}</p>
+      <p>{{addressFormGroup.get('publicAddress').value}}</p>
       <p>{{transactionDetailFormGroup.get('transactionId').value}}</p>
       <p>{{secretWordsFormGroup.get('secretWord1').value}}</p>
       <p>{{secretWordsFormGroup.get('secretWord2').value}}</p>
       <p>{{secretWordsFormGroup.get('secretWord3').value}}</p>
       <div>
         <button mat-stroked-button matStepperPrevious>Back</button>
-        <button mat-raised-button color="primary" (click)="onSubmit(); stepper.reset()" [disabled]="!addressFormGroup.valid && !secretWordsFormGroup.valid && (withDeposit && !transactionDetailFormGroup.valid)">Submit</button>
+        <button mat-raised-button color="primary"
+          (click)="onSubmit()">
+          <!-- [disabled]="!addressFormGroup.valid && !secretWordsFormGroup.valid && (withDeposit && !transactionDetailFormGroup.valid)"> -->
+          Submit
+        </button>
       </div>
     <!-- </form> -->
   </mat-step>
-  <!-- <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    You are now done.
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-    </div>
-  </mat-step> -->
 </mat-horizontal-stepper>
