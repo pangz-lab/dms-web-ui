@@ -6,7 +6,7 @@ export class ApiSetting {
     TX_LIST : '/transactions/list',
     BALANCE_SUMMARY : '/balances/summary/stakevsrewards',
     HISTORY_UPDATE_SUMMARY : '/histories/update-summary',
-    POOL_USER_REGISTRATION: '/pool/user/add',
+    POOL_USER_REGISTRATION: '/pool/user',
   };
 
   public static resolveEndpoint(uri: string): string {

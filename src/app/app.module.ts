@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ChartsModule } from 'ng2-charts';
@@ -40,13 +40,15 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {ReactiveFormsModule } from '@angular/forms';
 
+import { HttpAppInterceptor } from './interceptor/http.app.config';
+import { AppRoutingModule } from './routing/app-routing.module';
+
 import { AppMainComponent } from './components/app-main/app-main.component';
 import { TransactionSummaryComponent } from './components/transaction-summary/transaction-summary.component';
 import { TransactionSummaryHeaderComponent } from './components/transaction-summary-header/transaction-summary-header.component';
 import { TransactionSummaryBodyComponent } from './components/transaction-summary-body/transaction-summary-body.component';
 import { TransactionSummaryChartComponent } from './components/transaction-summary-chart/transaction-summary-chart.component';
 import { UpdateHistoryComponent } from './components/update-history/update-history.component';
-import { AppRoutingModule } from './routing/app-routing.module';
 import { PagNotFoundComponent } from './components/pag-not-found/pag-not-found.component';
 import { TransactionDetailComponent } from './components/transaction-detail/transaction-detail.component';
 import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
@@ -56,6 +58,7 @@ import { AppMainBodyComponent } from './components/app-main-body/app-main-body.c
 import { UpdateHistoryTableComponent } from './components/update-history-table/update-history-table.component';
 import { UserRegistrationFormComponent } from './components/user-registration-form/user-registration-form.component';
 import { MainRegistrationComponent } from './components/main-registration/main-registration.component';
+import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +77,8 @@ import { MainRegistrationComponent } from './components/main-registration/main-r
     AppMainBodyComponent,
     UpdateHistoryTableComponent,
     UserRegistrationFormComponent,
-    MainRegistrationComponent
+    MainRegistrationComponent,
+    ErrorDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -117,7 +121,10 @@ import { MainRegistrationComponent } from './components/main-registration/main-r
     ReactiveFormsModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: HttpAppInterceptor, multi: true }
+  ],
+  entryComponents: [ErrorDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
