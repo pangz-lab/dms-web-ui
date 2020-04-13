@@ -1,4 +1,4 @@
-<span>
+<span style="scrollbar-width: thin;">
   <div class="w3-container page-header">
     <div class="w3-cell-row w3-cell-middle" style="height:100%">
       <div class="w3-container w3-cell"></div>
@@ -41,7 +41,10 @@
             </div>
             <div class="w3-row-padding w3-animate-zoom">
               <div class="w3-cell-middle content-center">
-                <button class="w3-button w3-green register-button" onclick="document.getElementById('id01').style.display='block'">
+                <button
+                  matRipple
+                  class="w3-button w3-green register-button"
+                  (click)="goToRegsitration()">
                   Register
                 </button>
               </div>
@@ -49,7 +52,6 @@
           </div>
         </div>
       </div>
-
       <div class="w3-container w3-cell w3-cell-bottom"></div>
     </div>
   </div>
@@ -70,12 +72,17 @@
         <mat-card>
           <mat-card-title>Fill out the form to join the pool!</mat-card-title>
           <mat-card-content style="height: 65%">
-            <app-user-registration-form></app-user-registration-form>
+            <mat-progress-bar mode="query" *ngIf="loaderShown" ></mat-progress-bar>
+            <app-user-registration-form
+              (registrationCompleted)="confirmRegistration($event)"
+              (formSubmitted)="registrationSubmitted($event)"
+              (requestError)="registrationRequestError($event)"
+              >
+            </app-user-registration-form>
           </mat-card-content>
         </mat-card>
       </div>
       <div class="w3-col l2"><p> </p></div>
     </div>
   </div>
-
 </span>

@@ -1,0 +1,44 @@
+<div *ngIf="typeIs('generic')">
+  <h2 mat-dialog-title>{{data.title}}</h2>
+  <mat-dialog-content>{{data.reason}}</mat-dialog-content>
+  <mat-dialog-actions>
+    <!-- <button mat-button mat-dialog-close>Cancel</button> -->
+    <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+    <button mat-button [mat-dialog-close]="true">OK</button>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="typeIs('warning')">
+  <h2 mat-dialog-title>{{data.title}}</h2>
+  <mat-dialog-content>
+    <p>
+      <mat-icon>warning</mat-icon>
+      {{data.reason}}
+    <p>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <!-- <button mat-button mat-dialog-close>Cancel</button> -->
+    <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+    <button mat-button [mat-dialog-close]="true">OK</button>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="typeIs('network_error')">
+  <mat-dialog-content>
+    <mat-toolbar color="warn">
+      <h3 mat-dialog-title>
+        {{data.title}}
+      </h3>
+    </mat-toolbar>
+    <mat-divider></mat-divider>
+    <span mat-subheader>
+      <mat-icon>cloud_off</mat-icon>
+      {{data.reason}}
+    </span>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="true">
+      Close
+    </button>
+  </mat-dialog-actions>
+</div>

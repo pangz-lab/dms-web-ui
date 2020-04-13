@@ -1,11 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   Validators,
-  ReactiveFormsModule,
-  FormControl
+  NgForm
 } from '@angular/forms';
 import { MatStepper } from '@angular/material';
 import { ResponseData } from '../../interface';
@@ -17,20 +15,31 @@ import { PoolService } from '../../service/pool.service';
   styleUrls: ['./user-registration-form.component.css']
 })
 export class UserRegistrationFormComponent implements OnInit {
+  @Output() registrationCompleted = new EventEmitter<boolean>();
+  @Output() formSubmitted         = new EventEmitter<boolean>();
+  @Output() requestError          = new EventEmitter<boolean>();
   @ViewChild('stepper', { static: false }) stepper: MatStepper;
-  // private poolService: PoolService;
+  @ViewChild('formDirectAddressFormGroup', { static: false }) fdAddressFormGroup: NgForm;
+  @ViewChild('formDirectTransactionDetailFormGroup', { static: false }) fdTransactionDetailFormGroup: NgForm;
+  @ViewChild('formDirectSecretWordsFormGroup', { static: false }) fdSecretWordsFormGroup: NgForm;
+
   responseData: ResponseData;
   addressFormGroup: FormGroup;
   transactionDetailFormGroup: FormGroup;
   secretWordsFormGroup: FormGroup;
   withDeposit = true;
   validRegistration = false;
+  formFieldAppearance = 'standard';
+  hideWord1 = true;
+  hideWord2 = true;
+  hideWord3 = true;
   errorMessage = {
     email: '',
     publicAddress: '',
     transactionId: '',
     secretWords: []
   };
+  defaultTxId = '0000000000000000000000000000000000000000000000000000000000000000';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -39,7 +48,12 @@ export class UserRegistrationFormComponent implements OnInit {
 
   ngOnInit() {
     this.addressFormGroup = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [
+        Validators.required,
+        Validators.email,
+        Validators.minLength(10),
+        Validators.maxLength(100)
+      ]],
       publicAddress: ['', this.alphaNumericValidator(34, 40)],
       doneDeposit: [true]
     });
@@ -47,9 +61,9 @@ export class UserRegistrationFormComponent implements OnInit {
       transactionId: ['', this.alphaNumericValidator(64, 70)]
     });
     this.secretWordsFormGroup = this.formBuilder.group({
-      secretWord1: ['word1', this.alphaNumericValidator(5, 15)],
-      secretWord2: ['word2', this.alphaNumericValidator(5, 15)],
-      secretWord3: ['word3', this.alphaNumericValidator(5, 15)]
+      secretWord1: ['', this.alphaNumericValidator(5, 15)],
+      secretWord2: ['', this.alphaNumericValidator(5, 15)],
+      secretWord3: ['', this.alphaNumericValidator(5, 15)]
     });
   }
 
@@ -75,18 +89,37 @@ export class UserRegistrationFormComponent implements OnInit {
         ]
       };
 
+      this.formSubmitted.emit(true);
       this.poolService.registerUser(user)
-      .subscribe((result) => {
-        this.responseData = result;
-        console.log(' Data :: ');
-        console.log(result);
-      });
+      .subscribe(
+        (result) => {
+          let success = true;
+          this.responseData = result;
+          console.log(' Data :: ');
+          console.log(result);
 
-      this.addressFormGroup.reset();
-      this.transactionDetailFormGroup.reset();
-      this.secretWordsFormGroup.reset();
-      this.stepper.reset();
+          if (result.status.code > 201) {
+            success = false;
+          }
+
+          this.registrationCompleted.emit(success);
+          this.resetForm();
+        }, (error) => {
+          this.requestError.emit(true);
+        }
+      );
     }
+  }
+
+  resetForm() {
+    this.addressFormGroup.reset();
+    this.transactionDetailFormGroup.reset();
+    this.secretWordsFormGroup.reset();
+    this.stepper.reset();
+    // Error fields reset
+    this.fdAddressFormGroup.resetForm();
+    this.fdTransactionDetailFormGroup.resetForm();
+    this.fdSecretWordsFormGroup.resetForm();
   }
 
   alphaNumericValidator(min: number, max: number) {
@@ -109,14 +142,26 @@ export class UserRegistrationFormComponent implements OnInit {
     }
   }
 
-  doneDeposiToAccountToggle() {
-    const val = "0000000000000000000000000000000000000000000000000000000000000000";
+  // valueLength = () => {
+  //   emailAddress: this.getEmail().value.length ?? 0,
+  //   publicAddress: this.getPublicAddress().value.length ?? 0,
+  //   transactionId: this.getTransactionId().value.length ?? 0,
+  //   secretWord1: this.getSecretWords(1).value.length ?? 0,
+  //   secretWord2: this.getSecretWords(2).value.length ?? 0,
+  //   secretWord3: this.getSecretWords(3).value.length ?? 0
+  // }
+
+  doneDeposiToAccountToggle(el) {
     const transactionIdField = this.getTransactionId();
-    if (this.getDoneDeposit().value) {
-      transactionIdField.setValue(val);
-    } else {
+    if (el.checked) {
       transactionIdField.setValue('');
+    } else {
+      transactionIdField.setValue(this.defaultTxId);
     }
+  }
+
+  depositedToAccount() {
+    return this.getDoneDeposit().value;
   }
 
   isValidEmail() {
@@ -197,9 +242,27 @@ export class UserRegistrationFormComponent implements OnInit {
         this.errorMessage.secretWords[num] = 'Only [a-zA-Z0-9] characters are allowed....';
         return false;
       }
+      // this.secretWordIsUnique();
     }
 
     return true;
+  }
+
+  secretWordIsUnique() {
+    //@TODO fix the unique words
+    // const word1 = this.getSecretWords(1).value;
+    // const word2 = this.getSecretWords(2).value;
+    // const word3 = this.getSecretWords(3).value;
+    // const sameWord = (
+    //   word1 === word2 ||
+    //   word1 === word3 ||
+    //   word2 === word3
+    // );
+    // if (sameWord) {
+    //   this.errorMessage.secretWords[3] = 'Words should be unique...';
+    //   console.log("Has same value");
+    //   return false;
+    // }
   }
 
   getEmail() {

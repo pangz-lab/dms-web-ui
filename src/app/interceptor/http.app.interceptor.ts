@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ErrorDialogService } from './../service/error.dialog.service';
+import { DialogService } from './../service/dialog.service';
 
 import {
     HttpInterceptor,
@@ -12,39 +12,44 @@ import {
 
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { MessageDialogComponent } from '../components/dialog/message-dialog/message-dialog.component';
 
 @Injectable()
 export class HttpAppInterceptor implements HttpInterceptor {
 
-  constructor(public errorDialogService: ErrorDialogService) { }
+  constructor(public dialogService: DialogService) { }
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // const token: string = localStorage.getItem('token');
-
-    // if (token) {
-    //     request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + token) });
-    // }
-
-    // if (!request.headers.has('Content-Type')) {
-    //     request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
-    // }
-
+    this.dialogService.openLoadingDialog({});
     request = request.clone({ headers: request.headers.set('Accept', 'application/json') });
 
     return next.handle(request).pipe(
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
             console.log('event--->>>', event);
+            this.dialogService.close();
         }
         return event;
       }),
       catchError((error: HttpErrorResponse) => {
           let data = {};
+          console.log("Catch error");
+          console.log(error);
           data = {
-              reason: error && error.error && error.error.reason ? error.error.reason : '',
+              reason: error.statusText,
               status: error.status
           };
-          this.errorDialogService.openDialog(data);
+          this.showErrorMessage();
           return throwError(error);
       }));
+  }
+
+  private showErrorMessage() {
+    this.dialogService.close();
+    this.dialogService.openDialog({
+      type: MessageDialogComponent.TYPE.network_error,
+      title: 'Network Connection Error!',
+      reason: 'Unable to communicate with the server at the moment.',
+      status: '500'
+    });
   }
 }

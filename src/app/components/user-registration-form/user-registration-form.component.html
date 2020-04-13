@@ -1,38 +1,70 @@
 <mat-horizontal-stepper linear #stepper>
-  <mat-step [stepControl]="addressFormGroup">
-    <form [formGroup]="addressFormGroup" class="registration-form">
-      <ng-template matStepLabel>Address</ng-template>
-      <mat-form-field>
-        <input matInput
-          placeholder = "Email Address"
-          formControlName = "email"
+  <mat-step [stepControl]="addressFormGroup"
+    label="Address"
+    state="email">
+    <form [formGroup]="addressFormGroup" class="registration-form" #formDirectAddressFormGroup="ngForm">
+      <mat-form-field appearance="{{formFieldAppearance}}">
+        <mat-label>Email Address</mat-label>
+        <input
+          matInput
+          placeholder="youremail@domain.com"
+          formControlName="email"
+          #emailTmp
           required>
+        <mat-icon matSuffix>email</mat-icon>
+        <mat-hint align="start">youremail@domain.com</mat-hint>
+        <mat-hint align="end">{{emailTmp.value.length}} / (10-100)</mat-hint>
           <mat-error *ngIf="!isValidEmail()">
             {{errorMessage.email}}
           </mat-error>
       </mat-form-field>
-      <mat-form-field>
-        <input matInput
-            placeholder="T-Address/Public Address"
-            formControlName="publicAddress"
-            required>
+      <mat-form-field appearance="{{formFieldAppearance}}">
+        <mat-label>T-Address/Public Address</mat-label>
+        <input
+          matInput
+          placeholder="RFeHXibrwdnrxdKPozadvH8XAsNGXY7bxR"
+          formControlName="publicAddress"
+          #publicAddressTmp
+          required>
+        <mat-icon matSuffix>contact_mail</mat-icon>
+        <mat-hint align="start">Allowed values [a-zA-Z0-9]</mat-hint>
+        <mat-hint align="end">{{publicAddressTmp.value.length}} / (34-40)</mat-hint>
         <mat-error *ngIf="!isValidPublicAddress()">
           {{errorMessage.publicAddress}}
         </mat-error>
       </mat-form-field>
-      <mat-checkbox formControlName="doneDeposit" (click)="doneDeposiToAccountToggle()">Deposited to Dudezmobi account</mat-checkbox>
+      <mat-checkbox
+        formControlName="doneDeposit"
+        (change)="doneDeposiToAccountToggle($event)">
+        Deposited to Dudezmobi account
+      </mat-checkbox>
       <div>
-        <button mat-raised-button color="primary" (click)="goToNextStep()">Next</button>
+        <button mat-raised-button
+          color="primary"
+          (click)="goToNextStep()">
+          Next
+        </button>
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="transactionDetailFormGroup" [optional]="!getDoneDeposit().value">
-    <form [formGroup]="transactionDetailFormGroup" class="registration-form">
-      <ng-template matStepLabel>Transaction</ng-template>
-      <mat-form-field>
+
+  <mat-step
+    [stepControl]="transactionDetailFormGroup"
+    [optional]="!depositedToAccount()"
+    label="Transaction"
+    state="confirmation_number">
+    <form [formGroup]="transactionDetailFormGroup" class="registration-form" #formDirectTransactionDetailFormGroup="ngForm">
+      <mat-form-field appearance="{{formFieldAppearance}}">
+        <mat-label>Transaction ID</mat-label>
         <input matInput
-            placeholder="Transaction ID"
-            formControlName="transactionId">
+          placeholder="a901def22a610cd6e809c2e6765471b8c11732c6334ac7e0f9c9a6e2ee28cc48"
+          formControlName="transactionId"
+          #transactionIdTmp
+          [required]="depositedToAccount()"
+          [readonly]="!depositedToAccount()">
+        <mat-icon matSuffix>monetization_on</mat-icon>
+        <mat-hint align="start">Allowed values [a-zA-Z0-9]</mat-hint>
+        <mat-hint align="end">{{transactionIdTmp.value.length}} / (64-70)</mat-hint>
         <mat-error *ngIf="!isValidTransactionId()">
           {{errorMessage.transactionId}}
         </mat-error>
@@ -43,32 +75,62 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="secretWordsFormGroup">
-    <form [formGroup]="secretWordsFormGroup" class="registration-form">
-      <ng-template matStepLabel>Secret words</ng-template>
-      <mat-form-field>
+
+  <mat-step
+    [stepControl]="secretWordsFormGroup"
+    label="Secret words"
+    state="lock">
+    <form [formGroup]="secretWordsFormGroup"
+      class="registration-form"
+      #formDirectSecretWordsFormGroup="ngForm">
+      <mat-form-field appearance="{{formFieldAppearance}}">
+        <mat-label>Secret Word 1</mat-label>
         <input matInput
-            placeholder="Secret Word 1"
-            formControlName="secretWord1"
-            required>
+          placeholder="any word or combination of words"
+          formControlName="secretWord1"
+          required
+          #secretWord1Tmp
+          [type]="hideWord1 ? 'password' : 'text'">
+        <button mat-icon-button matSuffix (click)="hideWord1 = !hideWord1" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideWord1">
+          <mat-icon>{{hideWord1 ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-hint align="start">Allowed values [a-zA-Z0-9]</mat-hint>
+        <mat-hint align="end">{{secretWord1Tmp.value.length}} / (5-15)</mat-hint>
         <mat-error *ngIf="!isValidSecretWord(1)">
           {{errorMessage.secretWords[1]}}
         </mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field appearance="{{formFieldAppearance}}">
+        <mat-label>Secret Word 2</mat-label>
         <input matInput
-            placeholder="Secret Word 2"
-            formControlName="secretWord2"
-            required>
+          placeholder="any word or combination of words"
+          formControlName="secretWord2"
+          #secretWord2Tmp
+          required
+          [type]="hideWord2 ? 'password' : 'text'">
+        <button mat-icon-button matSuffix (click)="hideWord2 = !hideWord2" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideWord2">
+          <mat-icon>{{hideWord2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-hint align="start">Allowed values [a-zA-Z0-9]</mat-hint>
+        <mat-hint align="end">{{secretWord2Tmp.value.length}} / (5-15)</mat-hint>
         <mat-error *ngIf="!isValidSecretWord(2)">
           {{errorMessage.secretWords[2]}}
         </mat-error>
       </mat-form-field>
-      <mat-form-field>
+
+      <mat-form-field appearance="{{formFieldAppearance}}">
+        <mat-label>Secret Word 3</mat-label>
         <input matInput
-            placeholder="Secret Word 3"
-            formControlName="secretWord3"
-            required>
+          placeholder="any word or combination of words"
+          formControlName="secretWord3"
+          #secretWord3Tmp
+          required
+          [type]="hideWord3 ? 'password' : 'text'">
+        <button mat-icon-button matSuffix (click)="hideWord3 = !hideWord3" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideWord3">
+          <mat-icon>{{hideWord3 ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-hint align="start">Allowed values [a-zA-Z0-9]</mat-hint>
+        <mat-hint align="end">{{secretWord3Tmp.value.length}} / (5-15)</mat-hint>
         <mat-error *ngIf="!isValidSecretWord(3)">
           {{errorMessage.secretWords[3]}}
         </mat-error>
@@ -79,23 +141,64 @@
       </div>
     </form>
   </mat-step>
-  <mat-step>
-    <!-- <form [formGroup]="secretWordsFormGroup" class="registration-form"> -->
-      <ng-template matStepLabel>Submit</ng-template>
-      <p>{{addressFormGroup.get('email').value}}</p>
-      <p>{{addressFormGroup.get('publicAddress').value}}</p>
-      <p>{{transactionDetailFormGroup.get('transactionId').value}}</p>
-      <p>{{secretWordsFormGroup.get('secretWord1').value}}</p>
-      <p>{{secretWordsFormGroup.get('secretWord2').value}}</p>
-      <p>{{secretWordsFormGroup.get('secretWord3').value}}</p>
-      <div>
-        <button mat-stroked-button matStepperPrevious>Back</button>
-        <button mat-raised-button color="primary"
-          (click)="onSubmit()">
-          <!-- [disabled]="!addressFormGroup.valid && !secretWordsFormGroup.valid && (withDeposit && !transactionDetailFormGroup.valid)"> -->
-          Submit
-        </button>
-      </div>
-    <!-- </form> -->
+
+  <mat-step label="Submit" state="send">
+    <h5 mat-card-title>Summary</h5>
+
+    <mat-accordion [multi]="true">
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Input Confirmation</mat-panel-title>
+          <mat-panel-description>Check the values before submitting..</mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-form-field appearance="fill" style="width:50%;">
+          <mat-label>Email Address</mat-label>
+          <input matInput readonly value="{{getEmail().value}}">
+        </mat-form-field>
+        <mat-form-field  appearance="fill" style="width:50%;">
+          <mat-label>Public Address</mat-label>
+          <input matInput readonly value="{{getPublicAddress().value}}">
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Transaction ID</mat-label>
+          <input matInput readonly value="{{getTransactionId().value}}">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="width:33.3%;">
+          <mat-label>Secret Word 1</mat-label>
+          <input matInput readonly value="{{getSecretWords(1).value}}">
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width:33.3%;">
+          <mat-label>Secret Word 2</mat-label>
+          <input matInput readonly value="{{getSecretWords(2).value}}">
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width:33.3%;">
+          <mat-label>Secret Word 3</mat-label>
+          <input matInput readonly value="{{getSecretWords(3).value}}">
+        </mat-form-field>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <br>
+    <div>
+      <button mat-stroked-button matStepperPrevious>Back</button>
+      <button mat-raised-button color="primary"
+        (click)="onSubmit()">
+        Submit
+      </button>
+    </div>
   </mat-step>
+
+  <ng-template matStepperIcon="email">
+    <mat-icon>email</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="confirmation_number">
+    <mat-icon>confirmation_number</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="lock">
+    <mat-icon>lock</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="send">
+    <mat-icon>send</mat-icon>
+  </ng-template>
 </mat-horizontal-stepper>

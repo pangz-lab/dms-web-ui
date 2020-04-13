@@ -40,7 +40,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {ReactiveFormsModule } from '@angular/forms';
 
-import { HttpAppInterceptor } from './interceptor/http.app.config';
+import { HttpAppInterceptor } from './interceptor/http.app.interceptor';
 import { AppRoutingModule } from './routing/app-routing.module';
 
 import { AppMainComponent } from './components/app-main/app-main.component';
@@ -58,7 +58,9 @@ import { AppMainBodyComponent } from './components/app-main-body/app-main-body.c
 import { UpdateHistoryTableComponent } from './components/update-history-table/update-history-table.component';
 import { UserRegistrationFormComponent } from './components/user-registration-form/user-registration-form.component';
 import { MainRegistrationComponent } from './components/main-registration/main-registration.component';
-import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
+import { LoadingDialogComponent } from './components/dialog/loading-dialog/loading-dialog.component';
+import { MessageDialogComponent } from './components/dialog/message-dialog/message-dialog.component';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,8 @@ import { ErrorDialogComponent } from './components/error-dialog/error-dialog.com
     UpdateHistoryTableComponent,
     UserRegistrationFormComponent,
     MainRegistrationComponent,
-    ErrorDialogComponent
+    LoadingDialogComponent,
+    MessageDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -122,9 +125,13 @@ import { ErrorDialogComponent } from './components/error-dialog/error-dialog.com
     AppRoutingModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: HttpAppInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: HttpAppInterceptor, multi: true },
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false }
+    }
   ],
-  entryComponents: [ErrorDialogComponent],
+  entryComponents: [MessageDialogComponent, LoadingDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
