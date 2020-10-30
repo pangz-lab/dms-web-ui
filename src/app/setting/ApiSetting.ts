@@ -1,5 +1,5 @@
 export class ApiSetting {
-  public static API_SERVER = 'http://127.0.0.1:8888';
+  public static API_SERVER = 'http://localhost:7799';
   public static API_VERSION = '/v1';
   public static API_ENDPOINTS = {
     TX_SUMMARY : '/transactions',
