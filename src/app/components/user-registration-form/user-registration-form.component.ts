@@ -8,6 +8,7 @@ import {
 import { MatStepper } from '@angular/material';
 import { ResponseData } from '../../interface';
 import { PoolService } from '../../service/pool.service';
+import { prepareEventListenerParameters } from '@angular/compiler/src/render3/view/template';
 
 @Component({
   selector: 'app-user-registration-form',
@@ -18,6 +19,7 @@ export class UserRegistrationFormComponent implements OnInit {
   @Output() registrationCompleted = new EventEmitter<boolean>();
   @Output() formSubmitted         = new EventEmitter<boolean>();
   @Output() requestError          = new EventEmitter<boolean>();
+  @Output() formValueError        = new EventEmitter<any>();
   @ViewChild('stepper', { static: false }) stepper: MatStepper;
   @ViewChild('formDirectAddressFormGroup', { static: false }) fdAddressFormGroup: NgForm;
   @ViewChild('formDirectTransactionDetailFormGroup', { static: false }) fdTransactionDetailFormGroup: NgForm;
@@ -47,30 +49,15 @@ export class UserRegistrationFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.addressFormGroup = this.formBuilder.group({
-      email: ['', [
-        Validators.required,
-        Validators.email,
-        Validators.minLength(10),
-        Validators.maxLength(100)
-      ]],
-      publicAddress: ['', this.alphaNumericValidator(34, 40)],
-      doneDeposit: [true]
-    });
-    this.transactionDetailFormGroup = this.formBuilder.group({
-      transactionId: ['', this.alphaNumericValidator(64, 70)]
-    });
-    this.secretWordsFormGroup = this.formBuilder.group({
-      secretWord1: ['', this.alphaNumericValidator(5, 15)],
-      secretWord2: ['', this.alphaNumericValidator(5, 15)],
-      secretWord3: ['', this.alphaNumericValidator(5, 15)]
-    });
+    this.buildFormDefault();
   }
 
   onSubmit() {
     console.log(this.addressFormGroup.valid);
     console.log(this.transactionDetailFormGroup.valid);
     console.log(this.secretWordsFormGroup.valid);
+    //Improve unique words validation
+    this.isSecretWordUnique();
     this.validRegistration = (
       this.addressFormGroup.valid &&
       this.transactionDetailFormGroup.valid &&
@@ -93,13 +80,19 @@ export class UserRegistrationFormComponent implements OnInit {
       this.poolService.registerUser(user)
       .subscribe(
         (result) => {
-          let success = true;
-          this.responseData = result;
+          let success        = false;
+          const isValueValid = result.data.validation.validValues;
+          this.responseData  = result;
           console.log(' Data :: ');
           console.log(result);
 
-          if (result.status.code > 201) {
-            success = false;
+          if (!isValueValid) {
+            this.sendServerValidationError();
+            return false;
+          }
+
+          if (result.status.code === 201) {
+            success = true;
           }
 
           this.registrationCompleted.emit(success);
@@ -112,14 +105,34 @@ export class UserRegistrationFormComponent implements OnInit {
   }
 
   resetForm() {
-    this.addressFormGroup.reset();
-    this.transactionDetailFormGroup.reset();
-    this.secretWordsFormGroup.reset();
     this.stepper.reset();
+    this.buildFormDefault();
+
     // Error fields reset
     this.fdAddressFormGroup.resetForm();
     this.fdTransactionDetailFormGroup.resetForm();
     this.fdSecretWordsFormGroup.resetForm();
+  }
+
+  buildFormDefault() {
+    this.addressFormGroup = this.formBuilder.group({
+      email: ['', [
+        Validators.required,
+        Validators.email,
+        Validators.minLength(10),
+        Validators.maxLength(100)
+      ]],
+      publicAddress: ['', this.alphaNumericValidator(34, 40)],
+      doneDeposit: [true]
+    });
+    this.transactionDetailFormGroup = this.formBuilder.group({
+      transactionId: ['', this.alphaNumericValidator(64, 70)]
+    });
+    this.secretWordsFormGroup = this.formBuilder.group({
+      secretWord1: ['', this.alphaNumericValidator(5, 15)],
+      secretWord2: ['', this.alphaNumericValidator(5, 15)],
+      secretWord3: ['', this.alphaNumericValidator(5, 15)]
+    });
   }
 
   alphaNumericValidator(min: number, max: number) {
@@ -141,15 +154,6 @@ export class UserRegistrationFormComponent implements OnInit {
       this.nextStep(2);
     }
   }
-
-  // valueLength = () => {
-  //   emailAddress: this.getEmail().value.length ?? 0,
-  //   publicAddress: this.getPublicAddress().value.length ?? 0,
-  //   transactionId: this.getTransactionId().value.length ?? 0,
-  //   secretWord1: this.getSecretWords(1).value.length ?? 0,
-  //   secretWord2: this.getSecretWords(2).value.length ?? 0,
-  //   secretWord3: this.getSecretWords(3).value.length ?? 0
-  // }
 
   doneDeposiToAccountToggle(el) {
     const transactionIdField = this.getTransactionId();
@@ -242,27 +246,39 @@ export class UserRegistrationFormComponent implements OnInit {
         this.errorMessage.secretWords[num] = 'Only [a-zA-Z0-9] characters are allowed....';
         return false;
       }
-      // this.secretWordIsUnique();
     }
 
     return true;
   }
 
-  secretWordIsUnique() {
-    //@TODO fix the unique words
-    // const word1 = this.getSecretWords(1).value;
-    // const word2 = this.getSecretWords(2).value;
-    // const word3 = this.getSecretWords(3).value;
-    // const sameWord = (
-    //   word1 === word2 ||
-    //   word1 === word3 ||
-    //   word2 === word3
-    // );
-    // if (sameWord) {
-    //   this.errorMessage.secretWords[3] = 'Words should be unique...';
-    //   console.log("Has same value");
-    //   return false;
-    // }
+  isSecretWordUnique() {
+    const word1 = this.getSecretWords(1).value;
+    const word2 = this.getSecretWords(2).value;
+    const word3 = this.getSecretWords(3).value;
+    const sameWord = (
+      word1 === word2 ||
+      word1 === word3 ||
+      word2 === word3
+    );
+    if (sameWord) {
+      this.errorMessage.secretWords[3] = 'Words should be unique...';
+      console.log("Has same value");
+      this.secretWordsFormGroup.setErrors({notUnique: true});
+      this.formValueError.emit({
+        from: 'secretWords',
+        data: this.secretWordsFormGroup,
+        message: 'Secret Words should be unique...'
+      });
+      this.nextStep(2);
+    }
+  }
+
+  sendServerValidationError() {
+    this.formValueError.emit({
+      from: 'server',
+      data: [],
+      message: 'Some fields contain invalid value. Please recheck...'
+    });
   }
 
   getEmail() {

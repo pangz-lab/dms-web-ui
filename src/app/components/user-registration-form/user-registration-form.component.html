@@ -27,7 +27,7 @@
           #publicAddressTmp
           required>
         <mat-icon matSuffix>contact_mail</mat-icon>
-        <mat-hint align="start">Allowed values [a-zA-Z0-9]</mat-hint>
+        <mat-hint align="start">Allowed characters [a-zA-Z0-9]</mat-hint>
         <mat-hint align="end">{{publicAddressTmp.value.length}} / (34-40)</mat-hint>
         <mat-error *ngIf="!isValidPublicAddress()">
           {{errorMessage.publicAddress}}
@@ -38,6 +38,8 @@
         (change)="doneDeposiToAccountToggle($event)">
         Deposited to Dudezmobi account
       </mat-checkbox>
+
+      <br>
       <div>
         <button mat-raised-button
           color="primary"
@@ -63,12 +65,14 @@
           [required]="depositedToAccount()"
           [readonly]="!depositedToAccount()">
         <mat-icon matSuffix>monetization_on</mat-icon>
-        <mat-hint align="start">Allowed values [a-zA-Z0-9]</mat-hint>
+        <mat-hint align="start">Allowed characters [a-zA-Z0-9]</mat-hint>
         <mat-hint align="end">{{transactionIdTmp.value.length}} / (64-70)</mat-hint>
         <mat-error *ngIf="!isValidTransactionId()">
           {{errorMessage.transactionId}}
         </mat-error>
       </mat-form-field>
+
+      <br>
       <div>
         <button mat-stroked-button matStepperPrevious>Back</button>
         <button mat-raised-button color="primary" matStepperNext >Next</button>
@@ -90,11 +94,12 @@
           formControlName="secretWord1"
           required
           #secretWord1Tmp
+          autocomplete="true"
           [type]="hideWord1 ? 'password' : 'text'">
         <button mat-icon-button matSuffix (click)="hideWord1 = !hideWord1" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideWord1">
           <mat-icon>{{hideWord1 ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
-        <mat-hint align="start">Allowed values [a-zA-Z0-9]</mat-hint>
+        <mat-hint align="start">Allowed characters [a-zA-Z0-9]</mat-hint>
         <mat-hint align="end">{{secretWord1Tmp.value.length}} / (5-15)</mat-hint>
         <mat-error *ngIf="!isValidSecretWord(1)">
           {{errorMessage.secretWords[1]}}
@@ -105,13 +110,14 @@
         <input matInput
           placeholder="any word or combination of words"
           formControlName="secretWord2"
-          #secretWord2Tmp
           required
+          #secretWord2Tmp
+          autocomplete="true"
           [type]="hideWord2 ? 'password' : 'text'">
         <button mat-icon-button matSuffix (click)="hideWord2 = !hideWord2" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideWord2">
           <mat-icon>{{hideWord2 ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
-        <mat-hint align="start">Allowed values [a-zA-Z0-9]</mat-hint>
+        <mat-hint align="start">Allowed characters [a-zA-Z0-9]</mat-hint>
         <mat-hint align="end">{{secretWord2Tmp.value.length}} / (5-15)</mat-hint>
         <mat-error *ngIf="!isValidSecretWord(2)">
           {{errorMessage.secretWords[2]}}
@@ -123,21 +129,24 @@
         <input matInput
           placeholder="any word or combination of words"
           formControlName="secretWord3"
-          #secretWord3Tmp
           required
+          #secretWord3Tmp
+          autocomplete="true"
           [type]="hideWord3 ? 'password' : 'text'">
         <button mat-icon-button matSuffix (click)="hideWord3 = !hideWord3" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideWord3">
           <mat-icon>{{hideWord3 ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
-        <mat-hint align="start">Allowed values [a-zA-Z0-9]</mat-hint>
+        <mat-hint align="start">Allowed characters [a-zA-Z0-9]</mat-hint>
         <mat-hint align="end">{{secretWord3Tmp.value.length}} / (5-15)</mat-hint>
         <mat-error *ngIf="!isValidSecretWord(3)">
           {{errorMessage.secretWords[3]}}
         </mat-error>
       </mat-form-field>
+
+      <br>
       <div>
         <button mat-stroked-button matStepperPrevious>Back</button>
-        <button mat-raised-button color="primary" matStepperNext>Next</button>
+        <button mat-raised-button color="primary" matStepperNext (click)="isSecretWordUnique()">Next</button>
       </div>
     </form>
   </mat-step>

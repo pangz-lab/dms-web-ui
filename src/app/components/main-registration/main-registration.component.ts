@@ -46,11 +46,21 @@ export class MainRegistrationComponent implements OnInit {
     this.toggleFormProgressBar();
   }
 
+  formValueError(data: any) {
+    this.dialogService.openDialog({
+      type: MessageDialogComponent.TYPE.warning,
+      title: 'Invalid Form!',
+      reason: data.message,
+      status: '500'
+    });
+    this.loaderShown = false;
+  }
+
   showFailedRegistrationMessage() {
     this.dialogService.openDialog({
       type: MessageDialogComponent.TYPE.warning,
       title: 'Registration Unsuccesful!',
-      reason: 'Error: Email address or Public address already exist!',
+      reason: ' Email address or Public address already exist!',
       status: '500'
     });
   }

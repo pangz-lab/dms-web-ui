@@ -75,8 +75,9 @@
             <mat-progress-bar mode="query" *ngIf="loaderShown" ></mat-progress-bar>
             <app-user-registration-form
               (registrationCompleted)="confirmRegistration($event)"
-              (formSubmitted)="registrationSubmitted($event)"
               (requestError)="registrationRequestError($event)"
+              (formValueError)="formValueError($event)"
+              (formSubmitted)="registrationSubmitted($event)"
               >
             </app-user-registration-form>
           </mat-card-content>
